@@ -1,17 +1,17 @@
 # FV - File Validator
-=====================
 
 Blockchain-based file validation service
 
 Program fv.php connects to the local Emercoin wallet node. Please, edit
 following line for setup the actual EMC wallet credentials:
 
-$emcCONNECT = "http://user:secret\_pass@localhost:6662";
+$emcCONNECT = "http://user:secret_pass@localhost:6662";
 
 Script usage:
 
-1. Genetate signatures:
-   ===================
+1. Generate signatures:
+-----------------------
+
 ./fv.php filename 'validator|score'
 
 Example:
@@ -28,7 +28,9 @@ Signature line:
 
 
 2. Validate file:
-   =============
+-----------------
+
+
 ./fv.php filename
 
 Example:
