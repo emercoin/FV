@@ -7,10 +7,11 @@ following line for setup the actual EMC wallet credentials:
 
 $emcCONNECT = "http://user:secret_pass@localhost:6662";
 
+
 Script usage:
 
+
 1. Generate signatures:
------------------------
 
 ./fv.php filename 'validator|score'
 
@@ -28,8 +29,6 @@ Signature line:
 
 
 2. Validate file:
------------------
-
 
 ./fv.php filename
 
