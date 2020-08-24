@@ -80,7 +80,7 @@ function validate_signature($line, $search_key) {
   }
   $validator = preg_replace('/^SIG=/', '', $validator);
   Sanity($validator, "abcdefghijklmnopqrstuvwxyz-.");
-  Sanity($score, "0123456789");
+  Sanity($score, "0123456789-.");
   $valnvs = EMC_req('name_show', array("val:" . $validator));
   // print_r($valnvs);
   $sigaddr = $valnvs['address'];
@@ -128,7 +128,7 @@ if($argc > 2) {
     // Generate signature with specific validator name and score
     list($validator, $score) = explode('|', $argv[2]);
     Sanity($validator, "abcdefghijklmnopqrstuvwxyz-.");
-    Sanity($score, "0123456789");
+    Sanity($score, "0123456789-.");
     $valnvs = EMC_req('name_show', array("val:" . $validator));
     $sigaddr = $valnvs['address'];
     $sigmsg = join('|', array($validator, $score, $search_key));
