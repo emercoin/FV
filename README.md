@@ -10,6 +10,10 @@ $emcCONNECT = "http://user:secret_pass@localhost:6662";
 
 Script usage:
 
+0. Test connection to Emercoin wallet
+
+./fv.php -getinfo
+
 
 1. Generate signatures:
 

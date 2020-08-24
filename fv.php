@@ -78,7 +78,7 @@ function validate_signature($line, $search_key) {
       echo("Invalid signature line[". $line ."], validation *FAIL*\n");
       return 1;
   }
-  $validator = preg_replace('/SIG=/', '', $validator);
+  $validator = preg_replace('/^SIG=/', '', $validator);
   Sanity($validator, "abcdefghijklmnopqrstuvwxyz-.");
   Sanity($score, "0123456789");
   $valnvs = EMC_req('name_show', array("val:" . $validator));
