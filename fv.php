@@ -98,7 +98,15 @@ if($argc == 1) {
   printf("Usage:\n\t%s fname [validatorID|score]\n", $argv[0]);
   printf("\tIf specified fname only, validate fname with Emercoin FV service.\n");
   printf("\tIf specified fname and validatorID, generates validation signature.\n");
-  printf("Example:\n\t%s emercoin-0.7.10-win64-setup.exe emercoin|100\n\n", $argv[0]);
+  printf("Example:\n\t%s emercoin-0.7.10-win64-setup.exe 'emercoin|100'\n\n", $argv[0]);
+  exit(0);
+}
+
+// Just test wallet connection with getinfo
+if($argv[1] === '-getinfo') {
+  echo("getinfo test started\n");
+  $getinfo = EMC_req('getinfo', array());
+  print_r($getinfo);
   exit(0);
 }
 
