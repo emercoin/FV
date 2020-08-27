@@ -15,8 +15,8 @@ $algo = "sha256";
 // Performs NVS-request to EMC wallet
 // Returns JSON of response result. Exit with err print, if error
 // Example:
-// $ret = EMC_req('name_show', array('val:emercoin'));
-function EMC_req($cmd, $params) {
+// $ret = EMC_req('name_show', array('val:emercoin'), "Unable to run name_show");
+function EMC_req($cmd, $params, $errtxt) {
   global $emcCONNECT;
   // Prepares the request
   $request = json_encode(array(
@@ -43,7 +43,7 @@ function EMC_req($cmd, $params) {
     return $rc['result'];
   } while(false);
   // Eror handler
-  printf("Unable fetch data from EMC-node with request: [%s] and params:\n", $cmd);
+  printf("%s\nFail request details: cmd=[%s] and params:\n", $errtxt, $cmd);
   print_r($params);
   exit(1);
 } // EMC_req
@@ -81,12 +81,12 @@ function validate_signature($line, $search_key) {
   $validator = preg_replace('/^SIG=/', '', $validator);
   Sanity($validator, "abcdefghijklmnopqrstuvwxyz-.");
   Sanity($score, "0123456789-.");
-  $valnvs = EMC_req('name_show', array("val:" . $validator));
+  $valnvs = EMC_req('name_show', array("val:" . $validator), "Validator not found in NVS: " . $validator);
   // print_r($valnvs);
   $sigaddr = $valnvs['address'];
   $verstr = join('|', array($validator, $score, $search_key));
   // echo("verstr=$verstr;\n");
-  $valresult = EMC_req('verifymessage', array($sigaddr, $sig, $verstr));
+  $valresult = EMC_req('verifymessage', array($sigaddr, $sig, $verstr), "Cannot run verifymessage");
   $freetext = preg_replace('/[^[:print:]]/', '', $valnvs['value']);
   printf("\t%s [%s] created %s; Signature %s\n", $validator, $freetext, date('Y-m-d h:m', $valnvs['time']), $valresult? "PASSED" : "*FAIL*");
   return 1 ^ $valresult;
@@ -107,7 +107,7 @@ if($argc == 1) {
 // Just test wallet connection with getinfo
 if($argv[1] === '-getinfo') {
   echo("getinfo test started\n");
-  $getinfo = EMC_req('getinfo', array());
+  $getinfo = EMC_req('getinfo', array(), "Unable connect wallet");
   print_r($getinfo);
   exit(0);
 }
@@ -129,19 +129,19 @@ if($argc > 2) {
     list($validator, $score) = explode('|', $argv[2]);
     Sanity($validator, "abcdefghijklmnopqrstuvwxyz-.");
     Sanity($score, "0123456789-.");
-    $valnvs = EMC_req('name_show', array("val:" . $validator));
+    $valnvs = EMC_req('name_show', array("val:" . $validator), "Validator missing in NVS name: " . $validator);
     $sigaddr = $valnvs['address'];
     $sigmsg = join('|', array($validator, $score, $search_key));
     // printf("sigmsg=[%s]\n", $sigmsg);
-    $signature = EMC_req('signmessage', array($sigaddr, $sigmsg));
+    $signature = EMC_req('signmessage', array($sigaddr, $sigmsg), "Unable to signmessage");
     echo("FV signature for upload to NVS FV-record:\n");
     echo("NVS Key:\n\t$search_key\n");
     echo("Signature line:\n\tSIG=" . join('|', array($validator, $score, $signature)) . "\n\n");
     exit(0);
 } // Generate signature
 
-// No 2nd param - program valudetes signature(s) for specified file
-$valnvs = EMC_req('name_show', array($search_key));
+// No 2nd param - program validetes signature(s) for specified file
+$valnvs = EMC_req('name_show', array($search_key), "Missing NVS FV-record for your file" . $fname . " or Emer node access denied");
 // print_r($valnvs);
 
 printf("File %s; FV-record created: %s\n\nFile info from NVS:\n", $fname, date('Y-m-d h:m', $valnvs['time']));
