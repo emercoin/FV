@@ -88,7 +88,8 @@ function validate_signature($line, $search_key) {
   // echo("verstr=$verstr;\n");
   $valresult = EMC_req('verifymessage', array($sigaddr, $sig, $verstr), "Cannot run verifymessage");
   $freetext = preg_replace('/[^[:print:]]/', '', $valnvs['value']);
-  printf("\t%s [%s] created %s; Signature %s\n", $validator, $freetext, date('Y-m-d h:m', $valnvs['time']), $valresult? "PASSED" : "*FAIL*");
+
+  printf("\t%s/%s [%s] created %s; Signature %s\n", $validator, strtoupper($validator), $freetext, date('Y-m-d h:m', $valnvs['time']), $valresult? "PASSED" : "*FAIL*");
   return 1 ^ $valresult;
 } // validate_signature
 
