@@ -124,7 +124,7 @@ $search_key = "fv:" . $algo . "=" . hash_file($algo, $fname);
 // $search_key = "fv:sha256=169dc5dd293cd82f84737055403ae87a62008072d785376f56f6d309288a092a";
 // printf("Skey=%s\n", $search_key);
 
-// Presents 2nd param 'score|validator' - program runs in signature generation mode
+// Presents 2nd param 'validator|score' - program runs in signature generation mode
 if($argc > 2) {
     // Generate signature with specific validator name and score
     list($validator, $score) = explode('|', $argv[2]);
